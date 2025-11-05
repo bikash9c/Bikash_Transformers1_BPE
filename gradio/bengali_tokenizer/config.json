@@ -1,0 +1,7 @@
+{
+  "vocab_size": 500,
+  "num_merges_saved": 244,
+  "compression_ratio": 4.2461,
+  "merges_start_index": 256,
+  "notes": "Byte-level BPE tokenizer for Bengali corpus; includes mappings for merged tokens >255."
+}

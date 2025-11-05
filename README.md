@@ -1,150 +1,147 @@
 🪶 Bengali BPE Tokenizer
 
-A custom Byte Pair Encoding (BPE) tokenizer trained on Bengali Wikipedia (~5 MB), designed for tokenizing and decoding Bengali text at a byte level. Built completely from scratch in Python and deployed with an interactive Gradio web app on Hugging Face Spaces.
+A custom Byte Pair Encoding (BPE) tokenizer trained on Bengali Wikipedia (≈ 5 MB), designed for tokenizing and decoding Bengali text at a byte level.
+Built entirely from scratch in Python, with a clean Gradio web app deployed on Hugging Face Spaces.
 
 🚀 Project Overview
 
-This project shows how to create a byte-level BPE tokenizer similar to GPT-2’s tokenizer, trained specifically for Bengali text data. It includes a reversible encoder–decoder, Gradio UI, and deployment-ready tokenizer artifacts.
+This project demonstrates how to build a byte-level BPE tokenizer (like GPT-2’s) from scratch — trained specifically on Bengali UTF-8 text.
+It features a reversible encoder-decoder, compact vocabulary, and an interactive web interface.
 
 🧩 Key Features
 
-🔤 Byte-level BPE — learns merges on UTF-8 bytes, ensuring full character coverage.
+🔤 Byte-level BPE — learns merges on UTF-8 bytes for full Bengali script coverage.
 
-🔁 Fully reversible encode–decode process (perfect Bengali reconstruction).
+🔁 Fully reversible encode/decode (perfect Bengali reconstruction).
 
-⚙️ Compact vocabulary (4.5 K) trained on 5 MB of Wikipedia text.
+⚙️ Compact vocabulary — 500 learned tokens from a 5 MB corpus.
 
-💬 Interactive Gradio app for testing tokenization visually.
+💬 Interactive Gradio app for visual testing and verification.
 
 🌐 Deployable on Hugging Face Spaces or runnable locally.
 
 📂 Repository Structure
-
 bengali-bpe-tokenizer/
-├── app.py # Gradio interface
-├── tokenizer.py # Core tokenizer class (encode/decode)
-├── bengali_tokenizer/ # Trained tokenizer artifacts
-│ ├── merges.txt # Learned merge pairs
-│ ├── vocab.json # Token ID → readable token mapping
-│ └── config.json # Metadata
-├── train_tokenizer.ipynb # (Optional) Colab training script
-└── README.md # Project documentation
+│
+├── bengali_tokenizer/
+│   ├── config.json         # Metadata: vocab size, compression ratio, etc.
+│   ├── merges.txt          # Integer merge pairs (BPE rules)
+│   └── vocab.json          # Token ID → string mapping
+│
+├── app.py                  # Gradio web app interface
+├── tokenizer.py            # Core BengaliBPETokenizer class
+├── sample_bengali_text.txt # Example Bengali text for quick testing
+├── Bikash_Session_11_BPE.ipynb  # Colab notebook used for training
+└── README.md               # Project documentation
 
-🧠 Training Summary
-
-The tokenizer was trained on Bengali Wikipedia (November 2023 dump) using 5 MB of UTF-8 text. The BPE algorithm iteratively merges the most frequent byte pairs, forming subword tokens.
-
+🧠 Training Summary (Final Version)
 Parameter	Value
-Corpus	Bengali Wikipedia
-Sample Size	5 MB
-Vocabulary Size	4 500
-Base Tokens	0–255 (byte IDs)
-Merge Tokens	256–4 499
-Final Compression Ratio	~3.29×
-🧩 Usage Example
+Corpus	Bengali Wikipedia (5 MB UTF-8 sample)
+Initial Tokens	5 ,242 ,880 bytes
+Target Vocab Size	500
+Base Tokens	0 – 255 (byte IDs)
+Merged Tokens	256 – 499
+Total Merges	244
+Training Method	Full recomputation after every merge (no batching)
+Training Time	≈ 3.5 minutes on Colab T4
+Final Compression Ratio	4.25 ×
+Final Sequence Length	1 ,234 ,765 tokens (from 5 ,242 ,880 bytes)
+📊 Training Logs
+Training on 5,242,880 byte tokens (~5 MB of data)
+🚀 Starting BPE training: 244 merges (full recomputation each step)...
 
+📦 Merges: 100/244 | Compression: 3.42× | Length: 1,533,033
+📦 Merges: 200/244 | Compression: 4.04× | Length: 1,296,602
+📦 Merges: 244/244 | Compression: 4.25× | Length: 1,234,765
+
+✅ Training complete!
+✅ Final vocabulary size: 500
+✅ Final compression ratio: 4.25×
+📁 Saved -> bengali_tokenizer/merges.txt
+📁 Saved -> bengali_tokenizer/vocab.json
+📁 Saved -> bengali_tokenizer/config.json
+
+🧩 Usage Example
 from tokenizer import BengaliBPETokenizer
+
 tokenizer = BengaliBPETokenizer("bengali_tokenizer")
+
 text = "আপনাকে অনেক ধন্যবাদ।"
 ids = tokenizer.encode(text)
 decoded = tokenizer.decode(ids)
+
 print("Token IDs:", ids)
 print("Decoded Text:", decoded)
 
+
 ✅ Output
+
 Token IDs: [256, 134, 2656, 856, 4406, …]
 Decoded Text: আপনাকে অনেক ধন্যবাদ।
 
 🎨 Gradio Web App
 
-The Gradio app provides an interactive interface to test tokenization and decoding. Users can enter Bengali text, view token IDs and subword segments, and verify that decoding returns the original text.
+The Gradio app provides an interactive Bengali tokenization demo.
+Enter Bengali text or load a sample, view token IDs and merged tokens, and verify that decoding reconstructs the original text.
 
-Run locally:
+▶️ Run locally
 pip install gradio
 python app.py
 
-Or explore on Hugging Face Spaces:
-👉 Live Demo (Hugging Face): https://huggingface.co/spaces/bikash9c/BPE_bengali_tokenizer
+🌐 Live on Hugging Face Spaces
+
+👉 Bengali BPE Tokenizer Demo
 
 ⚙️ Tokenizer Files Explained
 File	Description
-merges.txt	List of integer token-pair merges defining the BPE rules.
-vocab.json	Maps token IDs to their readable representations (Bengali strings or merged pairs).
-config.json	Stores metadata such as vocab size and compression ratio.
+merges.txt	List of integer token-pair merges defining BPE rules.
+vocab.json	Token ID → string (Bengali glyphs or merged pairs).
+config.json	Metadata such as vocab size and compression ratio.
 
 These three files are sufficient to reconstruct the tokenizer anywhere.
 
-🧩 Example Output (from Gradio app)
+🧩 Example Output (from Gradio App)
 
 Input:
+
 তোমার মঙ্গল হোক! (হাঁচি দেওয়ার সময়)
 
+
 Output:
-🧩 Token IDs (first 200): [1156, 1756, 1706, 2556, 174, 256, …]
-🔤 Tokens (first 200): ['তো', 'মা', 'র', ' ', 'ম', 'ঙ্গল', …]
-🔁 Decoded text: তোমার মঙ্গল হোক! (হাঁচি দেওয়ার সময়)
+
+🧩 **Token IDs (first 200):**
+[274, 286, 285, 302, 174, 256, 482, 277, 364, 286, 276, 33, 374, 311, 265, 129, 359, 290, 166, 271, 147, 284, 302, 184, 285, 284, 41] ...
+
+🔤 **Tokens (first 200):**
+['ত', 'ো', 'ম', 'à¦¾à¦° à¦', '®', 'à¦', '\x99à§\x8dà¦\x97', 'ল', ' হ', 'ো', 'ক', '!', ' (', 'হ', 'à¦¾à¦', '\x81', 'চ', 'à¦¿ à¦', '¦', 'à§\x87à¦', '\x93', 'য়', 'à¦¾à¦° à¦', '¸', 'ম', 'য়', ')']
+
+🔁 **Decoded text:**
+তোমার মঙ্গল হোক! (হাঁচি দেওয়ার সময়)
 
 🧰 Requirements
 
-Runtime
 python >= 3.9
 gradio >= 4.0
 tqdm
 
-Optional (for training)
-datasets
+
 
 📜 License
 
-This project is released under the MIT License. You are free to use, modify, and integrate it into your NLP or research workflows.
+Released under the MIT License — free for research, educational, and commercial use with attribution.
 
-✍️ Author
 
-Bikash Chakraborty
-Data Science & AI Enthusiast
-📧 your.email@example.com
-
-🌐 https://huggingface.co/your-username
+Hugging face link:
+https://huggingface.co/spaces/bikash9c/bengali-tokenizer-bikash
 
 Subword tokenization is where raw bytes learn to speak Bengali. 🪶
 
-📊 Training Summary (from Logs)
+✅ Final Result
 
-Dataset: Bengali Wikipedia (5 MB sample, UTF-8 encoded)
+Efficient 500-token Bengali Byte-Pair Encoding model
 
-Initial Tokens: 5,242,880 bytes
+4.25× compression
 
-Target Vocabulary Size: 4,500
+Perfect decode round-trip
 
-Total Merges: 4,244
-
-Batch Size: 50 merges per recomputation
-
-Total Batches: 85
-
-Training Duration: ~36 minutes
-
-Final Compression Ratio: 3.29×
-
-Final Sequence Length: 1,592,917 tokens (from 5,242,880)
-
-Progress: Smooth and stable — compression steadily improved from 1.3× to 3.29×
-
-Artifacts Saved:
-
-✅ /content/drive/MyDrive/bengali_tokenizer/merges.txt
-
-✅ /content/drive/MyDrive/bengali_tokenizer/vocab.json
-
-✅ /content/drive/MyDrive/bengali_tokenizer/config.json
-
-Notes:
-
-The training converged cleanly with a balanced tradeoff between vocabulary granularity and compression.
-
-Step size of 50 maintained memory safety and efficient batching.
-
-The tokenizer achieves full reversibility on Bengali text.
-
-✅ Final Result:
-Efficient 4.5K-token Bengali Byte-Pair Encoding model with ~3.3× compression and perfect decoding accuracy.
+Compact & deployable tokenizer for Bengali language processing 🚀
