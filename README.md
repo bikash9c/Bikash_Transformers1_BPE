@@ -38,8 +38,7 @@ bengali-bpe-tokenizer/
 ├── Bikash_Session_11_BPE.ipynb # Colab notebook used for training
 └── README.md # Project documentation
 
-yaml
-Copy code
+
 
 ---
 
@@ -81,55 +80,9 @@ Training on 2,097,152 byte tokens (~2 MB of data)
 📁 Saved -> bengali_tokenizer/vocab.json
 📁 Saved -> bengali_tokenizer/config.json
 
-pgsql
-Copy code
 
----
 
-## 🧩 Usage Example
 
-```python
-from tokenizer import BengaliBPETokenizer
-
-tokenizer = BengaliBPETokenizer("bengali_tokenizer")
-
-text = "আপনাকে অনেক ধন্যবাদ।"
-ids = tokenizer.encode(text)
-decoded = tokenizer.decode(ids)
-
-print("Token IDs:", ids)
-print("Decoded Text:", decoded)
-print("Roundtrip Match:", decoded == text)
-✅ Output
-yaml
-Copy code
-Token IDs: [256, 134, 2656, 856, 4406, …]
-Decoded Text: আপনাকে অনেক ধন্যবাদ।
-Roundtrip Match: True
-🎨 Gradio Web App
-The Gradio interface lets you interactively test the tokenizer.
-
-✍️ Type or paste Bengali text
-
-🔘 Or click one of three sample sentences to auto-fill
-
-🚀 Click “Tokenize” to see:
-
-Token IDs
-
-Merged token strings
-
-Decoded text
-
-✅ Round-trip test (True/False)
-
-▶️ Run locally
-bash
-Copy code
-pip install gradio
-python app.py
-🌐 Live on Hugging Face Spaces
-👉 Bengali BPE Tokenizer Demo
 
 ⚙️ Tokenizer Files Explained
 File	Description
@@ -142,13 +95,12 @@ These three files fully define and reconstruct the tokenizer anywhere.
 🧩 Example Output (from Gradio App)
 Input:
 
-scss
-Copy code
 তোমার মঙ্গল হোক! (হাঁচি দেওয়ার সময়)
+
+
 Output:
 
-sql
-Copy code
+
 🧩 Token IDs (first 200):
 [274, 286, 285, 302, 174, 256, 482, 277, 364, 286, ... ]
 
@@ -159,9 +111,10 @@ Copy code
 তোমার মঙ্গল হোক! (হাঁচি দেওয়ার সময়)
 
 🧠 Roundtrip Test: ✅ True
+
+
 🧰 Requirements
-nginx
-Copy code
+
 python >= 3.9
 gradio >= 4.0
 tqdm
